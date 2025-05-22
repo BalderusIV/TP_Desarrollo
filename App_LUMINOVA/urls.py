@@ -42,4 +42,7 @@ urlpatterns = [
     path('ordenes/', ordenes, name='ordenes'),
     path('planificacion/', planificacion, name='planificacion'),
     path('reportes/', reportes, name='reportes'),
+    path('tabla_insumos/', tabla_insumos, name='tabla_insumos'),
+    path('orden_reporte/', orden_reporte, name='orden_reporte'),
+    path('informe_reporte/', informe_reporte, name='informe_reporte'),
 ]

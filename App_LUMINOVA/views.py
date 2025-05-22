@@ -73,3 +73,12 @@ def planificacion(request):
 
 def reportes(request):
     return render(request, 'reportes.html')
+
+def tabla_insumos(request):
+    return render(request, 'tabla_insumos.html')
+
+def orden_reporte(request):
+    return render(request, 'orden_reporte.html')
+
+def informe_reporte(request):
+    return render(request, 'informe_reporte.html')
