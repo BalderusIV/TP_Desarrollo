@@ -1,8 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import *
 from django.contrib import messages
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
@@ -10,8 +12,9 @@ from django.contrib import messages
 def compras(req):
     return render(req, "compras.html")
 
-def produccion(req):
-    return render(req, "produccion.html")
+def produccion(request):
+    ordenes = Orden.objects.all()
+    return render(request, 'produccion.html', {'ordenes': ordenes})
 
 def ventas(req):
     return render(req, "ventas.html")
@@ -66,19 +69,76 @@ def auditoria(request):
 
 #  Funciones para los botones del sidebar de Produccion
 def ordenes(request):
-    return render(request, 'ordenes.html')
+    ordenes = Orden.objects.all()
+    return render(request, 'ordenes.html', {'ordenes': ordenes})
 
 def planificacion(request):
-    return render(request, 'planificacion.html')
-
+    ordenes = Orden.objects.all()
+    return render(request, 'planificacion.html', {'ordenes': ordenes})
 def reportes(request):
-    return render(request, 'reportes.html')
-
+    reportes = Reporte.objects.all()
+    return render(request, 'reportes.html', {'reportes': reportes})
 def tabla_insumos(request):
     return render(request, 'tabla_insumos.html')
 
-def orden_reporte(request):
-    return render(request, 'orden_reporte.html')
+def orden_reporte(request, numero_orden, sector):
+    if request.method == 'POST':
+        numero_orden = request.POST.get('numero_orden')
+        sector = request.POST.get('sector')
+        fecha = request.POST.get('fecha')
+        tipo_problema = request.POST.get('tipo_problema')
+        descripcion = request.POST.get('descripcion')
+         
+        Reporte.objects.create(
+            numero_orden=numero_orden,
+            sector=sector,
+            fecha=fecha,
+            tipo_problema=tipo_problema,
+            descripcion=descripcion
+        )
+        
+        return redirect('App_LUMINOVA:reportes')
+    fecha_actual = timezone.now().date().strftime('%Y-%m-%d')
+    return render(request, 'orden_reporte.html', {
+        'numero_orden': numero_orden,
+        'sector': sector,
+        'fecha_actual': fecha_actual,
+    })
 
 def informe_reporte(request):
     return render(request, 'informe_reporte.html')
+
+
+def actualizar_orden(request, numero_orden):
+    orden = get_object_or_404(Orden, numero_orden=numero_orden)
+    if request.method == 'POST':
+        # Actualiza el sector si viene en el formulario
+        if 'sector' in request.POST:
+            orden.sector = request.POST.get('sector', orden.sector)
+        # Actualiza el estado si viene en el formulario
+        if 'estado' in request.POST:
+            orden.estado = request.POST.get('estado', orden.estado)
+        orden.save()
+    return redirect('App_LUMINOVA:planificacion')
+
+
+def cambiar_estado_orden(request, numero_orden):
+    if request.method == 'POST':
+        nuevo_estado = request.POST.get('estado')
+        orden = get_object_or_404(Orden, numero_orden=numero_orden)
+        orden.estado = nuevo_estado
+        orden.save()
+        return redirect('App_LUMINOVA:planificacion')
+    
+def guardar_cambios_planificacion(request):
+    if request.method == 'POST':
+        ordenes = Orden.objects.all()
+        for orden in ordenes:
+            sector = request.POST.get(f'sector_{orden.id}')
+            estado = request.POST.get(f'estado_{orden.id}')
+            if sector and sector != orden.sector:
+                orden.sector = sector
+            if estado and estado != orden.estado:
+                orden.estado = estado
+            orden.save()
+    return redirect('App_LUMINOVA:planificacion')

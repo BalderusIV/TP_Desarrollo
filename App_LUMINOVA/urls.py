@@ -43,6 +43,9 @@ urlpatterns = [
     path('planificacion/', planificacion, name='planificacion'),
     path('reportes/', reportes, name='reportes'),
     path('tabla_insumos/', tabla_insumos, name='tabla_insumos'),
-    path('orden_reporte/', orden_reporte, name='orden_reporte'),
+    path('orden_reporte/<str:numero_orden>/<str:sector>/', orden_reporte, name='orden_reporte'),
     path('informe_reporte/', informe_reporte, name='informe_reporte'),
+    
+    path('actualizar_orden/<str:numero_orden>/', actualizar_orden, name='actualizar_orden'),
+    path('guardar_cambios_planificacion/', guardar_cambios_planificacion, name='guardar_cambios_planificacion'),
 ]
