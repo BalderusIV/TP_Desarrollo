@@ -33,40 +33,39 @@
 {% endblock %}
 
 {% block content %}
-<div style="background: #0d6efd; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
-    <form style="background: #0d6efd; color: #fff; padding: 40px 30px 30px 30px; border-radius: 10px; width: 950px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-        <h2 class="text-center mb-4" style="font-weight: bold;">Reportar un problema</h2>
-        <div class="row mb-4" style="display: flex; gap: 32px;">
-            <div style="flex: 1;">
-                <label class="form-label" style="color: #fff;">Número de orden</label>
-                <input type="text" class="form-control text-center" value="004274" readonly style="font-weight: bold; width: 100%; min-width: 0;">
-            </div>
-            <div style="flex: 1;">
-                <label class="form-label" style="color: #fff;">Sector</label>
-                <input type="text" class="form-control text-center" value="A" readonly style="font-weight: bold; width: 100%; min-width: 0;">
-            </div>
-            <div style="flex: 1;">
-                <label class="form-label" style="color: #fff;">Fecha</label>
-                <input type="text" class="form-control text-center" value="21/06/2025" readonly style="font-weight: bold; width: 100%; min-width: 0;">
-            </div>
-            <div style="flex: 1;">
-                <label class="form-label" style="color: #fff;">tipo de problema</label>
-                <select class="form-select text-center" style="font-weight: bold; width: 100%; min-width: 220px;">
-                    <option selected disabled>seleccione un problema</option>
-                    <option>Falta de insumos</option>
-                    <option>Falla técnica</option>
-                    <option>Otro</option>
-                </select>
-            </div>
+<form method="post" style="background: #0d6efd; color: #fff; padding: 40px 30px 30px 30px; border-radius: 10px; width: 950px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+    {% csrf_token %}
+    <h2 class="text-center mb-4" style="font-weight: bold;">Reportar un problema</h2>
+    <div class="row mb-4" style="display: flex; gap: 32px;">
+        <div style="flex: 1;">
+            <label class="form-label" style="color: #fff;">Número de orden</label>
+            <input type="text" name="numero_orden" class="form-control text-center" value="{{ numero_orden }}" readonly style="font-weight: bold; width: 100%; min-width: 0;">
         </div>
-        <h4 class="text-center mb-3" style="font-weight: bold;">Informe sobre el problema</h4>
-        <div class="mb-4">
-            <textarea class="form-control" rows="7" placeholder="Descripción Breve del Problema..." style="resize: none; font-size: 1.1rem;"></textarea>
+        <div style="flex: 1;">
+            <label class="form-label" style="color: #fff;">Sector</label>
+            <input type="text" name="sector" class="form-control text-center" value="{{ sector }}" readonly style="font-weight: bold; width: 100%; min-width: 0;">
         </div>
-        <div class="text-center">
-            <button type="submit" class="btn btn-outline-light px-5" style="font-weight: bold; border-radius: 20px;">Enviar Reporte</button>
+        <div style="flex: 1;">
+            <label class="form-label" style="color: #fff;">Fecha</label>
+            <input type="text" name="fecha" class="form-control text-center" value="{{ fecha_actual }}" readonly style="font-weight: bold; width: 100%; min-width: 0;">
         </div>
-    </form>
-</div>
+        <div style="flex: 1;">
+            <label class="form-label" style="color: #fff;">tipo de problema</label>
+            <select name="tipo_problema" class="form-select text-center" style="font-weight: bold; width: 100%; min-width: 220px;">
+                <option selected disabled>seleccione un problema</option>
+                <option>Falta de insumos</option>
+                <option>Falla técnica</option>
+                <option>Otro</option>
+            </select>
+        </div>
+    </div>
+    <h4 class="text-center mb-3" style="font-weight: bold;">Informe sobre el problema</h4>
+    <div class="mb-4">
+        <textarea name="descripcion" class="form-control" rows="7" placeholder="Descripción Breve del Problema..." style="resize: none; font-size: 1.1rem;"></textarea>
+    </div>
+    <div class="text-center">
+        <button type="submit" class="btn btn-outline-light px-5" style="font-weight: bold; border-radius: 20px;">Enviar Reporte</button>
+    </div>
+</form>
 {% endblock %}
 
