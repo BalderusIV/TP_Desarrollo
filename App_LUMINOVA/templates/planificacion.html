@@ -36,9 +36,6 @@
 
 {% block content %}
 
-
-
-
 <section>
     <div class="table-responsive">
         <table class="table">
@@ -48,83 +45,43 @@
                 <th>Fecha de inicio</th>
                 <th>Fecha limite</th>
                 <th>Asignado a</th>
-
+                <th>Estado</th>
+                <th>Acción</th>
             </tr>
+            {% for orden in ordenes %}
             <tr>
-                <td>00045237</td>
-                <td>Nombre</td>
-                <td>fecha de inicio</td>
-                <td>Fecha limite</td>
-                <td><select class="form-select" id="asignar1">
-                                <option selected disabled>Sin asignar</option>
-                                <option value="Grupo A">Grupo A</option>
-                                <option value="Grupo B">Grupo B</option>
-                                <option value="Grupo C">Grupo C</option>
+                <form method="post" action="{% url 'App_LUMINOVA:actualizar_orden' orden.numero_orden %}">
+                    {% csrf_token %}
+                    <td><a href="{% url 'App_LUMINOVA:tabla_insumos' %}?numero_orden={{ orden.numero_orden }}&sector={{ orden.sector }}" class="text-primary text-decoration-none">
+                        {{ orden.numero_orden }}
+                    </a></td>
+                    <td>{{ orden.cliente }}</td>
+                    <td>{{ orden.fecha_inicio }}</td>
+                    <td>{{ orden.fecha_limite }}</td>
+                    <td>
+                        <select name="sector" class="form-select">
+                            <option value="Sin asignar" {% if orden.sector == 'Sin asignar' %}selected{% endif %}>Sin asignar</option>
+                            <option value="Grupo A" {% if orden.sector == 'Grupo A' %}selected{% endif %}>Grupo A</option>
+                            <option value="Grupo B" {% if orden.sector == 'Grupo B' %}selected{% endif %}>Grupo B</option>
+                            <option value="Grupo C" {% if orden.sector == 'Grupo C' %}selected{% endif %}>Grupo C</option>
                         </select>
                     </td>
-
-            </tr>
-            <tr>
-                <td>00045238</td>
-                <td>Nombre</td>
-                <td>fecha de inicio</td>
-                <td>Fecha limite</td>
-                <td><select class="form-select" id="asignar2">
-                                <option selected disabled>Sin asignar</option>
-                                <option value="Grupo A">Grupo A</option>
-                                <option value="Grupo B">Grupo B</option>
-                                <option value="Grupo C">Grupo C</option>
+                    <td>
+                        <select name="estado" class="form-select">
+                            <option value="Sin asignar" {% if orden.estado == 'Sin asignar' %}selected{% endif %}>Sin asignar</option>
+                            <option value="En proceso" {% if orden.estado == 'En proceso' %}selected{% endif %}>En proceso</option>
+                            <option value="Finalizado" {% if orden.estado == 'Finalizado' %}selected{% endif %}>Finalizado</option>
+                            <option value="Interrumpido" {% if orden.estado == 'Interrumpido' %}selected{% endif %}>Interrumpido</option>
                         </select>
                     </td>
-            </tr>
-            <tr>
-                <td>00045240</td>
-                <td>Nombre</td>
-                <td>fecha de inicio</td>
-                <td>Fecha limite</td>
-                <td><select class="form-select" id="asignar3">
-                                <option selected disabled>Sin asignar</option>
-                                <option value="Grupo A">Grupo A</option>
-                                <option value="Grupo B">Grupo B</option>
-                                <option value="Grupo C">Grupo C</option>
-                        </select>
+                    <td>
+                        <button type="submit" class="btn btn-success">Guardar</button>
                     </td>
+                </form>
             </tr>
-            <tr>
-                <td>N</td>
-                <td>Nombre</td>
-                <td>fecha de inicio</td>
-                <td>Fecha limite</td>
-                <td>
-                    
-                    <select class="form-select" id="asignar4">
-                                <option selected disabled>Sin asignar</option>
-                                <option value="Grupo A">Grupo A</option>
-                                <option value="Grupo B">Grupo B</option>
-                                <option value="Grupo C">Grupo C</option>
-                        </select>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>N</td>
-                <td>Nombre</td>
-                <td>fecha de inicio</td>
-                <td>Fecha limite</td>
-                <td>
-                    <select class="form-select" id="asignar5">
-                                <option selected disabled>Sin asignar</option>
-                                <option value="Grupo A">Grupo A</option>
-                                <option value="Grupo B">Grupo B</option>
-                                <option value="Grupo C">Grupo C</option>
-                        </select>
-                </td>
-            </tr>
-
+            {% endfor %}
         </table>
-
     </div>
-
 </section>
 
 {% endblock %}
